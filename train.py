@@ -1,3 +1,6 @@
+# python train.py --net alex --name alex_div2k_1 --dataset train/lpips_train --batch_size 1
+# python train.py --net alex --name alex_div2k_full --dataset ['train/lpips_train', 'train/cnn','train/mix'] --batch_size 1
+# python train.py --use_gpu --net alex --name alex_retrain_saliency --model saliency_lpips
 import torch.backends.cudnn as cudnn
 cudnn.benchmark=False
 
@@ -9,7 +12,7 @@ from data import data_loader as dl
 import argparse
 from util.visualizer import Visualizer
 from IPython import embed
-
+# own dataset train/lpips_train
 parser = argparse.ArgumentParser()
 parser.add_argument('--datasets', type=str, nargs='+', default=['train/traditional','train/cnn','train/mix'], help='datasets to train on: [train/traditional],[train/cnn],[train/mix],[val/traditional],[val/cnn],[val/color],[val/deblur],[val/frameinterp],[val/superres]')
 parser.add_argument('--model', type=str, default='lpips', help='distance model type [lpips] for linearly calibrated net, [baseline] for off-the-shelf network, [l2] for euclidean distance, [ssim] for Structured Similarity Image Metric')

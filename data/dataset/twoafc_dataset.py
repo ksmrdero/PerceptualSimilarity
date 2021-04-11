@@ -42,15 +42,15 @@ class TwoAFCDataset(BaseDataset):
     def __getitem__(self, index):
         p0_path = self.p0_paths[index]
         p0_img_ = Image.open(p0_path).convert('RGB')
-        p0_img = self.transform(p0_img_)
+        # p0_img = self.transform(p0_img_)
 
         p1_path = self.p1_paths[index]
         p1_img_ = Image.open(p1_path).convert('RGB')
-        p1_img = self.transform(p1_img_)
+        # p1_img = self.transform(p1_img_)
 
         ref_path = self.ref_paths[index]
         ref_img_ = Image.open(ref_path).convert('RGB')
-        ref_img = self.transform(ref_img_)
+        # ref_img = self.transform(ref_img_)
 
         judge_path = self.judge_paths[index]
         # judge_img = (np.load(judge_path)*2.-1.).reshape((1,1,1,)) # [-1,1]
@@ -58,8 +58,8 @@ class TwoAFCDataset(BaseDataset):
 
         judge_img = torch.FloatTensor(judge_img)
 
-        return {'p0': p0_img, 'p1': p1_img, 'ref': ref_img, 'judge': judge_img,
-            'p0_path': p0_path, 'p1_path': p1_path, 'ref_path': ref_path, 'judge_path': judge_path}
+        return {'p0': np.array(p0_img_, dtype=np.float32), 'p1': np.array(p1_img_, dtype=np.float32), 'ref': np.array(ref_img_, dtype=np.float32), 'judge': judge_img, 'p0_path': p0_path, 'p1_path': p1_path, 'ref_path': ref_path, 'judge_path': judge_path}
+        # return {'p0': p0_img, 'p1': p1_img, 'ref': ref_img, 'judge': judge_img, 'p0_path': p0_path, 'p1_path': p1_path, 'ref_path': ref_path, 'judge_path': judge_path}
 
     def __len__(self):
         return len(self.p0_paths)

@@ -21,9 +21,9 @@ if(use_gpu):
 dist = loss_fn.forward(dummy_im0,dummy_im1)
 
 ## Example usage with images
-ex_ref = lpips.im2tensor(lpips.load_image('./imgs/ex_ref.png'))
-ex_p0 = lpips.im2tensor(lpips.load_image('./imgs/ex_p0.png'))
-ex_p1 = lpips.im2tensor(lpips.load_image('./imgs/ex_p1.png'))
+ex_ref = lpips.im2tensor(lpips.load_image('orig_0136_mbt.png'))
+ex_p0 = lpips.im2tensor(lpips.load_image('0136_mbt.png'))
+ex_p1 = lpips.im2tensor(lpips.load_image('0136_lo_cropped.png'))
 if(use_gpu):
 	ex_ref = ex_ref.cuda()
 	ex_p0 = ex_p0.cuda()
@@ -39,5 +39,10 @@ else:
     
     # Visualize a spatially-varying distance map between ex_p0 and ex_ref
     import pylab
-    pylab.imshow(ex_d0[0,0,...].data.cpu().numpy())
-    pylab.show()
+    pylab.imshow(ex_d1[0,0,...].data.cpu().numpy())
+    print(ex_d1[0, 0, ...].data.cpu().numpy().shape)
+    print(ex_d1[0, 0, ...].data.cpu().numpy())
+    # pylab.show()
+    pylab.colorbar()
+    pylab.savefig('foo2.png', bbox_inches='tight')
+    print('hit')
