@@ -204,20 +204,24 @@ class Saliency_LPIPS(nn.Module):
         #     res = saliency_avg(tmp, 10)
         #     maps[i] = res
         # print(in0, in0.size)
-        mapss = [saliency.computeSaliency(x.cpu().detach().numpy())[1] for x in in0]
+        # mapss = [saliency.computeSaliency(x.cpu().detach().numpy())[1] for x in in0]
         maps = [self.transform(Image.fromarray(
-            np.repeat(np.uint8(x*255)[:, :, np.newaxis], 3, axis=2))) for x in mapss]
+            np.repeat(np.uint8(saliency.computeSaliency(x.cpu().detach().numpy())[1]*255)[:, :, np.newaxis], 3, axis=2))) for x in in0]
         # unorm = UnNormalize(mean=(0.5, 0.5, 0.5),
         #                     std=(0.5, 0.5, 0.5))
         # x = unorm(x)
         # (success, sal) = saliency.computeSaliency(in0)
-        a = [Image.fromarray(t.cpu().detach().numpy().astype(np.uint8))
-             for t in in0]
-        b = [self.transform(c) for c in a]
+        b = [self.transform(Image.fromarray(
+            t.cpu().detach().numpy().astype(np.uint8))) for t in in0]
+        # a = [Image.fromarray(t.cpu().detach().numpy().astype(np.uint8))
+        #      for t in in0]
+        # b = [self.transform(c) for c in a]
         in0 = torch.stack(b).to(device='cuda')
-        a = [Image.fromarray(t.cpu().detach().numpy().astype(np.uint8))
-             for t in in1]
-        b = [self.transform(c) for c in a]
+        # a = [Image.fromarray(t.cpu().detach().numpy().astype(np.uint8))
+        #      for t in in1]
+        # b = [self.transform(c) for c in a]
+        b = [self.transform(Image.fromarray(
+            t.cpu().detach().numpy().astype(np.uint8))) for t in in1]
         in1 = torch.stack(b).to(device='cuda')
         # print(in1.shape)
         # tmp = np.array([self.transform(Image.fromarray(x.numpy())) for x in in0])
