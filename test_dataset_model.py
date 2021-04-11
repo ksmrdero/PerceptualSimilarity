@@ -1,3 +1,4 @@
+# python test_dataset_model.py --model saliency_lpips
 import numpy as np
 import lpips
 from data import data_loader as dl

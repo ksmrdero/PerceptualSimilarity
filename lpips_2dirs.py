@@ -1,6 +1,8 @@
+# python lpips_2dirs.py -d0 /data/div2k/train/raw_cropped_10px/ -d1 /data/div2k/train/mbt2018-mean-msssim-8_cropped_10px/ -o logs/mbt_cropped_normalized.csv --use_gpu
 import argparse
 import os
 import lpips
+from PIL import Image
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-d0','--dir0', type=str, default='./imgs/ex_dir0')
@@ -25,14 +27,17 @@ for file in files:
 		# Load images
 		img0 = lpips.im2tensor(lpips.load_image(os.path.join(opt.dir0,file))) # RGB image from [-1,1]
 		img1 = lpips.im2tensor(lpips.load_image(os.path.join(opt.dir1,file)))
+		# img0 = lpips.load_image(os.path.join(opt.dir0, file))
+		# img1 = lpips.load_image(os.path.join(opt.dir1, file))
+		# if(opt.use_gpu):
+		# 	img0 = img0.cuda()
+		# 	img1 = img1.cuda()
 
-		if(opt.use_gpu):
-			img0 = img0.cuda()
-			img1 = img1.cuda()
-
+		# img0 = Image.open(os.path.join(opt.dir0, file))
+		# img1 = Image.open(os.path.join(opt.dir1, file))
 		# Compute distance
 		dist01 = loss_fn.forward(img0,img1)
-		print('%s: %.3f'%(file,dist01))
-		f.writelines('%s: %.6f\n'%(file,dist01))
+		print('%s: %.8f'%(file,dist01))
+		f.writelines('%s, %.8f\n'%(file,dist01))
 
 f.close()

@@ -28,7 +28,7 @@ class TwoAFCDataset(BaseDataset):
         self.p1_paths = sorted(self.p1_paths)
 
         transform_list = []
-        transform_list.append(transforms.Scale(load_size))
+        # transform_list.append(transforms.Scale(load_size))
         transform_list += [transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5),(0.5, 0.5, 0.5))]
 
@@ -58,8 +58,8 @@ class TwoAFCDataset(BaseDataset):
 
         judge_img = torch.FloatTensor(judge_img)
 
-        return {'p0': p0_img, 'p1': p1_img, 'ref': ref_img, 'judge': judge_img,
-            'p0_path': p0_path, 'p1_path': p1_path, 'ref_path': ref_path, 'judge_path': judge_path}
+        return {'p0': np.array(p0_img_), 'p1': np.array(p1_img_), 'ref': np.array(ref_img_), 'judge': judge_img, 'p0_path': p0_path, 'p1_path': p1_path, 'ref_path': ref_path, 'judge_path': judge_path}
+        # return {'p0': p0_img, 'p1': p1_img, 'ref': ref_img, 'judge': judge_img, 'p0_path': p0_path, 'p1_path': p1_path, 'ref_path': ref_path, 'judge_path': judge_path}
 
     def __len__(self):
         return len(self.p0_paths)

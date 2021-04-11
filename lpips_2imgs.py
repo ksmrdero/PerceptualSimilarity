@@ -1,3 +1,6 @@
+# python lpips_2imgs.py -p0 orig_0136_mbt.png -p1 0136_mbt_5.png
+# python lpips_2imgs.py -p0 orig_0136_lo.png -p1 0136_lo.png
+
 import argparse
 import lpips
 

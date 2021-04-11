@@ -57,6 +57,10 @@ class Trainer():
         elif(self.model in ['DSSIM','dssim','SSIM','ssim']):
             self.net = lpips.DSSIM(use_gpu=use_gpu,colorspace=colorspace)
             self.model_name = 'SSIM'
+        elif (self.model == 'saliency_lpips'):
+            self.net = lpips.Saliency_LPIPS(pretrained=not is_train, net=net, version=version, lpips=True, spatial=spatial,
+                                   pnet_rand=pnet_rand, pnet_tune=pnet_tune,
+                                   use_dropout=True, model_path=model_path, eval_mode=False)
         else:
             raise ValueError("Model [%s] not recognized." % self.model)
 
@@ -236,6 +240,7 @@ def score_2afc_dataset(data_loader, func, name=''):
     d0s = np.array(d0s)
     d1s = np.array(d1s)
     gts = np.array(gts)
+    print(d0s, d1s, gts)
     scores = (d0s<d1s)*(1.-gts) + (d1s<d0s)*gts + (d1s==d0s)*.5
 
     return(np.mean(scores), dict(d0s=d0s,d1s=d1s,gts=gts,scores=scores))
