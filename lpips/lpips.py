@@ -193,11 +193,6 @@ class Saliency_LPIPS(nn.Module):
 
         self.transform = transforms.Compose(transform_list)
 
-        transform_list = []
-        transform_list.append(transforms.Scale(64))
-        transform_list += [transforms.ToTensor()]
-        self.transform_saliency = transforms.Compose(transform_list)
-
     def forward(self, in0, in1,  retPerLayer=False, normalize=False):
         # print(in0)
         # print(in0.shape)
@@ -210,7 +205,7 @@ class Saliency_LPIPS(nn.Module):
         #     maps[i] = res
         # print(in0, in0.size)
         mapss = [saliency.computeSaliency(x.cpu().detach().numpy())[1] for x in in0]
-        maps = [self.transform_saliency(Image.fromarray(
+        maps = [self.transform(Image.fromarray(
             np.repeat(np.uint8(x*255)[:, :, np.newaxis], 3, axis=2))) for x in mapss]
         # unorm = UnNormalize(mean=(0.5, 0.5, 0.5),
         #                     std=(0.5, 0.5, 0.5))
