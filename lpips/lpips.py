@@ -207,23 +207,23 @@ class Saliency_LPIPS(nn.Module):
         # print(in0, in0.size)
         # mapss = [saliency.computeSaliency(x.cpu().detach().numpy())[1] for x in in0]
         maps = [self.transform(Image.fromarray(
-            np.repeat(np.uint8(self.saliency.computeSaliency(x.detach().numpy())[1]*255)[:, :, np.newaxis], 3, axis=2))) for x in in0]
+            np.repeat(np.uint8(saliency.computeSaliency(x.cpu().detach().numpy())[1]*255)[:, :, np.newaxis], 3, axis=2))) for x in in0]
         # unorm = UnNormalize(mean=(0.5, 0.5, 0.5),
         #                     std=(0.5, 0.5, 0.5))
         # x = unorm(x)
         # (success, sal) = saliency.computeSaliency(in0)
         b = [self.transform(Image.fromarray(
-            t.detach().numpy().astype(np.uint8))) for t in in0]
+            t.cpu().detach().numpy().astype(np.uint8))) for t in in0]
         # a = [Image.fromarray(t.cpu().detach().numpy().astype(np.uint8))
         #      for t in in0]
         # b = [self.transform(c) for c in a]
-        in0 = torch.stack(b)
+        in0 = torch.stack(b).to(device='cuda')
         # a = [Image.fromarray(t.cpu().detach().numpy().astype(np.uint8))
         #      for t in in1]
         # b = [self.transform(c) for c in a]
         b = [self.transform(Image.fromarray(
-            t.detach().numpy().astype(np.uint8))) for t in in1]
-        in1 = torch.stack(b)
+            t.cpu().detach().numpy().astype(np.uint8))) for t in in1]
+        in1 = torch.stack(b).to(device='cuda')
         # print(in1.shape)
         # tmp = np.array([self.transform(Image.fromarray(x.numpy())) for x in in0])
         # in0 = torch.from_numpy(tmp)
@@ -269,7 +269,7 @@ class Saliency_LPIPS(nn.Module):
         # embed()
         # return 10*torch.log10(b/a)
         # print(val.shape)
-        res = torch.from_numpy(np.array([(val[i].detach().numpy() * (maps[i].detach().numpy())).mean()
+        res = torch.from_numpy(np.array([(val[i].cpu().detach().numpy() * (maps[i].cpu().detach().numpy())).mean()
                         for i in range(len(in1))]))
         # print(res)
         # print(res.shape)
@@ -278,7 +278,7 @@ class Saliency_LPIPS(nn.Module):
         res = torch.unsqueeze(res, 1)
         res = torch.unsqueeze(res, 1)
         res = torch.unsqueeze(res, 1)
-        # res = res.to(device='cuda')
+        res = res.to(device='cuda')
         if(retPerLayer):
             print(val)
             return (val, res)
